@@ -1,0 +1,39 @@
+Check the stock level procedure
+CREATE OR REPLACE PROCEDURE check_stock_level(product_id INT)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    qty INT;
+BEGIN
+    SELECT stock_quantity INTO qty FROM products WHERE id = product_id;
+
+    IF qty <= 10 THEN
+        RAISE NOTICE 'Low stock';
+    ELSIF qty > 10 AND qty <= 55 THEN
+        RAISE NOTICE 'Sufficient stock';
+    ELSE
+        RAISE NOTICE 'High stock';
+    END IF;
+END;
+$$;
+
+
+Check the stock category procedure
+CREATE OR REPLACE PROCEDURE check_stock_category(product_id INT)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    qty INT;
+    category TEXT;
+BEGIN
+    SELECT stock_quantity INTO qty FROM products WHERE id = product_id;
+
+    category := CASE
+        WHEN qty < 10 THEN 'Low Stock'
+        WHEN qty BETWEEN 10 AND 50 THEN 'Moderate Stock'
+        ELSE 'High Stock'
+    END;
+
+    RAISE NOTICE 'Stock category for product %: %', product_id, category;
+END;
+$$;

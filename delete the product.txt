@@ -1,0 +1,32 @@
+get the product
+CREATE OR REPLACE FUNCTION get_product_by_id(input_product_id INT)
+RETURNS TABLE (
+    name TEXT,
+    price NUMERIC,
+    stock_quantity INT
+)
+LANGUAGE plpgsql AS $$
+BEGIN
+    RETURN QUERY
+    SELECT name, price, stock_quantity
+    FROM products
+    WHERE product_id = input_product_id;
+END;
+$$;
+
+get the product details
+SELECT * FROM get_product_by_id(1);
+
+
+
+
+Delete the product
+CREATE OR REPLACE PROCEDURE delete_product(input_product_id INT)
+LANGUAGE plpgsql AS $$
+BEGIN
+    DELETE FROM products
+    WHERE product_id = input_product_id;
+END;
+$$;
+
+CALL delete_product(1);
